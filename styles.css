@@ -1,3 +1,24 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(216, 216, 216);
+}
+
+#head-wrapper {
+  height: 50px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  flex-flow: row nowrap;
+  background-color: #696969;
+  margin: 0;
+  padding: 20px;
+}
+
+#header-text {
+  margin: 10px auto;
+}
+
 /* The sidebar menu */
 .sidebar {
   display: flex;
@@ -23,9 +44,10 @@
   /* Place content 60px from the top */
   transition: 0.5s;
   /* 0.5 second transition effect to slide in the sidebar */
+  z-index: 2;
 }
 
-.sidebar h3 {
+.sidebar h3, .sidebar h4 {
   flex: 0 1 100%;
   padding: 8px 8px 8px 32px;
   text-decoration: none;
@@ -85,10 +107,52 @@
 }
 
 #searchform {
-  margin-left: 10px;
+  margin: 0 20px 0 20px;
 }
 #searchbtn {
-  margin: 5px 0 0 20px;
+  margin: 5px 0 0 15px;
+}
+
+#weather-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-content: space-around;
+  margin-left: 240px;
+}
+
+.weather-card {
+  height: 300px;
+  width: 200px;
+  position: relative;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  background-color: white;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.weather-card::after {
+  border-radius: 7px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.weather-card:hover {
+  transform: scale(1.25, 1.25);
+  -webkit-transform: scale(1.25, 1.25);
+}
+.weather-card:hover::after {
+  opacity: 1;
 }
 
 
