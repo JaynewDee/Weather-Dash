@@ -7,14 +7,14 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Weather Dash</title>
      <link rel="stylesheet" href="./styles.css">
-     <!-- <link rel="stylesheet" href="./materialize.css"> -->
+     <script defer src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 
 </head>
 
 <body>
      <header>
           <div id="head-wrapper">
-               <h1 id="header-text">Weather <em>Dash</em> </h1>
+               <h1 id="header-text">Weather<em>Dash</em> </h1>
           </div>
      </header>
      <div id="mySidebar" class="sidebar">
@@ -27,16 +27,25 @@
           <br>
           <br>
           <br>
-          <h4>Search History:</h4>
-          <a href="#" id="search-query"></a>
+          <h4 id = "history">Search History:</h4>
+          
      </div>
      <!-- Expander button -->
      <div id="hamburger">
           <button class="openbtn" onclick='openNav()'>&#9776; Add Location</button>
      </div>
-
+     <div id="weather-main-wrapper">
+          <div id="weather-main"></div>
+     </div>
      <div id="weather-wrapper">
-          <div class="weather-card"></div>
+          <!-- <div class="weather-card"></div> -->
+     </div>
+     <div id="fiveday-wrapper">
+          <div class="future-card"></div>
+          <div class="future-card"></div>
+          <div class="future-card"></div>
+          <div class="future-card"></div>
+          <div class="future-card"></div>
      </div>
 
 
