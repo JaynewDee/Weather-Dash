@@ -2,8 +2,7 @@
 
 ### A strapping, dashing weatherboard 
 > **||Weather-Dash||** 
-<br>  
-
+<br>
 ### *DESCRIPTION* 
 > Weather-Dash is great for anyone who makes trip back and forth between remote and networked locations!
 >  
