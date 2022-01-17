@@ -10,7 +10,13 @@ const bigList = $('#big-list');
 const cityHeader = $('#city-header');
 const dataCol = $('#right-column');
 const searchBtn = $('#searchbtn')
-const links = $('a')
+const links = $('.history');
+const smallOne = $('#small-card-one');
+const smallTwo = $('#small-card-two');
+const smallHeaderOne = $('#small-header-one');
+const smallHeaderTwo = $('#small-header-two')
+
+links.on("click", (event) => console.log(event))
 
 let lastSearched;
 
@@ -34,10 +40,20 @@ function storageInit() {
 }
 // Initialize page with search history from local storage
 window.onload = () => {
-  event.stopPropagation();
   storageInit();
   populateMain();
 }
+
+function populateSub() {
+  let itemOneKey = localStorage.key(localStorage.length - 2);
+  let itemTwoKey = localStorage.key(localStorage.length - 3);
+  let itemOne = JSON.parse(localStorage.getItem(itemOneKey));
+  let itemTwo = JSON.parse(localStorage.getItem(itemTwoKey));
+  let valuesOne = Object.values(itemOne);
+  let valuesTwo = Object.values(itemTwo);
+
+}
+populateSub()
 
 
 // Sidebar collapse&expand control
@@ -176,6 +192,7 @@ function displayHistory() {
       anchor = document.createElement("a")
       node = document.createTextNode(item.city)
       anchor.setAttribute("data", item.url)
+      anchor.setAttribute("class", "history")
       $('#mySidebar').append(anchor);
       anchor.append(node);
       i++;
@@ -186,21 +203,8 @@ function displayHistory() {
   }
 };
 
-links.on("click", (event) => {
-  console.log(event)
-  event.preventDefault();
-  let url = event.target.data;
-  console.log(event.target)
-  getWeatherObj(url)
-    .then(() => {
-      localStorage.getItem(event.target.innerHTML)
-    })
-})
-
 // Handle transfer of data from response/local storage to weather cards
-function populateMain() {
-  // Define condition and function for comparing last search to displayed card
-  
+function populateMain() {  
   if (localStorage.length > 0) {
     let mainKey = localStorage.length - 1;
     let keyName = localStorage.key(mainKey);
@@ -219,16 +223,6 @@ function populateMain() {
   }
   return
 };
-
-function populateMinor() {
-  if (localStorage.length > 1) {
-
-
-
-
-
-  }
-}
 
 searchFormEl.submit(getCoords);
 
