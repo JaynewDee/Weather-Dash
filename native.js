@@ -15,11 +15,10 @@ const smallOne = $('#small-card-one');
 const smallTwo = $('#small-card-two');
 const smallHeaderOne = $('#small-header-one');
 const smallHeaderTwo = $('#small-header-two')
+const smallListOne = $('#small-list-one');
+const smallListTwo = $('#small-list-two');
 
 links.on("click", (event) => console.log(event))
-
-let lastSearched;
-
 
 class Location {
   constructor(city, date, temp, feel, humidity, wind, uv, url) {
@@ -40,22 +39,43 @@ function storageInit() {
 }
 // Initialize page with search history from local storage
 window.onload = () => {
+  cityHeader.text('');
+  dataCol.text('');
+  smallHeaderOne.text('')
+  smallListOne.text('')
+  smallHeaderTwo.text('')
+  smallListTwo.text('')
   storageInit();
   populateMain();
+  populateSub();
 }
 
 function populateSub() {
-  let itemOneKey = localStorage.key(localStorage.length - 2);
-  let itemTwoKey = localStorage.key(localStorage.length - 3);
-  let itemOne = JSON.parse(localStorage.getItem(itemOneKey));
-  let itemTwo = JSON.parse(localStorage.getItem(itemTwoKey));
-  let valuesOne = Object.values(itemOne);
-  let valuesTwo = Object.values(itemTwo);
-
+  if (localStorage.length > 2) {
+    let itemOneKey = localStorage.key(localStorage.length - 2);
+    let itemTwoKey = localStorage.key(localStorage.length - 3);
+    let itemOne = JSON.parse(localStorage.getItem(itemOneKey));
+    let itemTwo = JSON.parse(localStorage.getItem(itemTwoKey));
+    let valuesOne = Object.values(itemOne);
+    let valuesTwo = Object.values(itemTwo);
+    let headerOne = valuesOne.shift();
+    let headerTwo = valuesTwo.shift();
+    smallHeaderOne.text(headerOne);
+    smallHeaderTwo.text(headerTwo);
+    valuesOne.splice(4, 3);
+    valuesTwo.splice(4, 3);
+    valuesOne.forEach((value) => {
+      item = document.createElement('li');
+      item.textContent = value;
+      smallListOne.append(item)
+    })
+    valuesTwo.forEach((value) => {
+      item = document.createElement('li');
+      item.textContent = value;
+      smallListTwo.append(item)
+    })
+  }
 }
-populateSub()
-
-
 // Sidebar collapse&expand control
 const openNav = function () {
   sidebar.css({
@@ -116,7 +136,7 @@ function getCoords(event) {
 
       searchTerm = location.query.join(', ').toUpperCase();
       searchQueryEl.text(searchTerm);
-      
+
       getWeatherObj(buildWeatherUrl(lat, long));
 
     });
@@ -159,13 +179,12 @@ async function getWeatherObj(coordsUrl) {
     .then(() => {
       let header = cityHeader.text().toString().toLowerCase();
       let input = searchInput.val().toString().toLowerCase();
-      if (header !== input) {
+      if (header !== input && localStorage.length > 2) {
         cityHeader.text(' ');
         dataCol.text(' ');
         let data = JSON.parse(localStorage.getItem(searchInput.val().toUpperCase()))
-        console.log(data)
         let values = Object.values(data)
-          values.pop();
+        values.pop();
         let cityName = values.shift();
         cityHeader.text(cityName);
         values.forEach((value) => {
@@ -173,14 +192,13 @@ async function getWeatherObj(coordsUrl) {
           dataCol.append(row);
           row.textContent = value;
         })
-        console.log("The elements are not equal! And the comparison is working.")
+      } else if (header === input) {
+        return;
       }
-      else if (header === input) {
-        console.log("You've performed a redundant search.")
-      }
-      return
     })
 }
+
+
 
 
 // Uses local storage to populate search history with previous cities viewed
@@ -197,14 +215,13 @@ function displayHistory() {
       anchor.append(node);
       i++;
     }
-  }
-  else {
+  } else {
     return
   }
 };
 
 // Handle transfer of data from response/local storage to weather cards
-function populateMain() {  
+function populateMain() {
   if (localStorage.length > 0) {
     let mainKey = localStorage.length - 1;
     let keyName = localStorage.key(mainKey);
@@ -225,4 +242,3 @@ function populateMain() {
 };
 
 searchFormEl.submit(getCoords);
-
