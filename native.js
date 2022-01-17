@@ -20,6 +20,7 @@ const smallListTwo = $('#small-list-two');
 
 links.on("click", (event) => console.log(event))
 
+// Initialize object constructor to model storage of relevant data from fetch
 class Location {
   constructor(city, date, temp, feel, humidity, wind, uv, url) {
     this.city = city;
@@ -95,10 +96,6 @@ const closeNav = function () {
 }
 $(".closebtn").click(closeNav());
 $(".openbtn").click(openNav());
-
-// window.addEventListener("click", () => {
-
-// })
 
 // Handle submission of search and fetch to mapbox
 function getCoords(event) {
@@ -234,7 +231,7 @@ function populateMain() {
     dataCol.append(list)
     values.forEach((value) => {
       row = document.createElement('li');
-      dataCol.append(row);
+      list.append(row);
       row.textContent = value;
     })
   }
