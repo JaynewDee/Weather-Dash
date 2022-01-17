@@ -10,6 +10,7 @@ const bigList = $('#big-list');
 const cityHeader = $('#city-header');
 const dataCol = $('#right-column');
 const searchBtn = $('#searchbtn')
+const links = $('a')
 
 let lastSearched;
 
@@ -135,14 +136,33 @@ async function getWeatherObj(coordsUrl) {
       const newItem = new Location(location, day, temperature, realFeel, humid, windSpeed, uvIndex, coordsUrl);
       return newItem;
     })
-    .then(newItem => {
+    .then((newItem) => {
       localStorage.setItem(searchTerm, JSON.stringify(newItem));
       lastSearched = searchTerm;
     })
     .then(() => {
-      cityHeader.text(' ');
-      dataCol.text(' ');
-      populateMain();
+      let header = cityHeader.text().toString().toLowerCase();
+      let input = searchInput.val().toString().toLowerCase();
+      if (header !== input) {
+        cityHeader.text(' ');
+        dataCol.text(' ');
+        let data = JSON.parse(localStorage.getItem(searchInput.val().toUpperCase()))
+        console.log(data)
+        let values = Object.values(data)
+          values.pop();
+        let cityName = values.shift();
+        cityHeader.text(cityName);
+        values.forEach((value) => {
+          row = document.createElement('li');
+          dataCol.append(row);
+          row.textContent = value;
+        })
+        console.log("The elements are not equal! And the comparison is working.")
+      }
+      else if (header === input) {
+        console.log("You've performed a redundant search.")
+      }
+      return
     })
 }
 
@@ -155,7 +175,7 @@ function displayHistory() {
       item = JSON.parse(localStorage.getItem(localStorage.key([i])));
       anchor = document.createElement("a")
       node = document.createTextNode(item.city)
-      anchor.setAttribute("href", item.url)
+      anchor.setAttribute("data", item.url)
       $('#mySidebar').append(anchor);
       anchor.append(node);
       i++;
@@ -166,22 +186,21 @@ function displayHistory() {
   }
 };
 
-// $("anchor").click((event) => {
-//   event.preventDefault();
-//   event.stopPropagation();
-//   let url = event.target.href;
-//   console.log(event.target)
-//   getWeatherObj(url)
-//     .then(() => {
-//       localStorage.getItem(event.target.innerHTML)
-//     })
-// })
+links.on("click", (event) => {
+  console.log(event)
+  event.preventDefault();
+  let url = event.target.data;
+  console.log(event.target)
+  getWeatherObj(url)
+    .then(() => {
+      localStorage.getItem(event.target.innerHTML)
+    })
+})
 
 // Handle transfer of data from response/local storage to weather cards
 function populateMain() {
   // Define condition and function for comparing last search to displayed card
   
-
   if (localStorage.length > 0) {
     let mainKey = localStorage.length - 1;
     let keyName = localStorage.key(mainKey);
@@ -200,7 +219,6 @@ function populateMain() {
   }
   return
 };
-
 
 function populateMinor() {
   if (localStorage.length > 1) {
